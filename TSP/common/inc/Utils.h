@@ -4,8 +4,10 @@
 #include <vector>
 
 namespace Utils {
-	std::vector< std::vector<int> >* matrix_builder(std::string const& filename);
-	void matrix_dump(std::vector< std::vector< int > > const& v);
+	typedef std::vector< std::vector<int> > matrix_t;
+
+	matrix_t* matrix_builder(std::string const& filename);
+	void matrix_dump(matrix_t const& v);
 }
 
 #endif // !UTILS_H_

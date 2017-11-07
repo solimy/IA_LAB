@@ -6,8 +6,8 @@
 #include <string>
 #include <sstream>
 
-std::vector< std::vector< int > >* Utils::matrix_builder(std::string const& filename) {
-	auto matrix = new std::vector< std::vector< int > >();
+Utils::matrix_t* Utils::matrix_builder(std::string const& filename) {
+	auto matrix = new Utils::matrix_t();
 	std::vector< int > tmp;
 	std::ifstream file;
 
@@ -36,7 +36,7 @@ std::vector< std::vector< int > >* Utils::matrix_builder(std::string const& file
 	return matrix;
 }
 
-void Utils::matrix_dump(std::vector< std::vector< int > > const& v) {
+void Utils::matrix_dump(matrix_t const& v) {
 	for (auto &line : v) {
 		for (auto &i : line) {
 			std::cout << i;
