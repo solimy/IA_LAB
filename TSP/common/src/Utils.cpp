@@ -23,7 +23,6 @@ std::vector< std::vector< int > >* Utils::matrix_builder(std::string const& file
 	}
 
 	std::string line;
-	char* token;
 	while (std::getline(file, line))
 	{
 		matrix->push_back(tmp);
