@@ -9,7 +9,7 @@ namespace Utils {
 	struct Path
 	{
 		std::vector<int> path;
-		long length;
+		long length=0;
 	};
 
 	matrix_t* matrix_builder(std::string const& filename);
