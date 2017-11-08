@@ -1,0 +1,6 @@
+﻿  tsp_agent_1.cpp
+d:\workspace\ia_lab\tsp_repos\tsp\tsp_agent_1\tsp_agent_1.cpp(55): warning C4244: 'initialisation' : conversion de 'std::chrono::system_clock::rep' en 'unsigned int', perte possible de données
+  Utils.cpp
+d:\workspace\ia_lab\tsp_repos\tsp\common\src\utils.cpp(17): warning C4101: 'e' : variable locale non référencée
+  Génération de code en cours...
+  tsp_agent_1.vcxproj -> D:\Workspace\IA_LAB\TSP_repos\TSP\Debug\tsp_agent_1.exe
