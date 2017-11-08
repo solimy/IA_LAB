@@ -6,6 +6,12 @@
 namespace Utils {
 	typedef std::vector< std::vector<int> > matrix_t;
 
+	struct Path
+	{
+		std::vector<int> path;
+		long length;
+	};
+
 	matrix_t* matrix_builder(std::string const& filename);
 	void matrix_dump(matrix_t const& v);
 }
