@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <chrono>
 
 Utils::matrix_t* Utils::matrix_builder(std::string const& filename) {
 	auto matrix = new Utils::matrix_t();
@@ -43,4 +44,26 @@ void Utils::matrix_dump(matrix_t const& v) {
 		}
 		std::cout << std::endl;
 	}
+}
+
+void Utils::path_dump(Path const& p) {
+	std::ofstream file;
+
+	std::stringstream filename;
+	filename << "path_output_";
+	filename << std::chrono::system_clock::now().time_since_epoch().count();
+	filename << ".txt";
+	try
+	{
+		file.open(filename.str());
+	}
+	catch (const std::exception&e)
+	{
+		throw std::runtime_error("Error: Utils::path_dump: could not create output file");
+	}
+	if (file.is_open() == false) {
+		throw std::runtime_error("Error: Utils::path_dump: could not create output file");
+	}
+	for (auto& i : p.path) file << i+1 << std::endl;
+	file.close();
 }
