@@ -48,10 +48,11 @@ void Utils::matrix_dump(matrix_t const& v) {
 
 void Utils::path_dump(Path const& p) {
 	std::ofstream file;
+	unsigned long long time = std::chrono::system_clock::now().time_since_epoch().count();
 
 	std::stringstream filename;
 	filename << "path_output_";
-	filename << std::chrono::system_clock::now().time_since_epoch().count();
+	filename << time;
 	filename << ".txt";
 	try
 	{
@@ -65,5 +66,23 @@ void Utils::path_dump(Path const& p) {
 		throw std::runtime_error("Error: Utils::path_dump: could not create output file");
 	}
 	for (auto& i : p.path) file << i+1 << std::endl;
+	file.close();
+
+	std::stringstream filename2;
+	filename2 << "path_output_length_";
+	filename2 << time;
+	filename2 << ".txt";
+	try
+	{
+		file.open(filename2.str());
+	}
+	catch (const std::exception&e)
+	{
+		throw std::runtime_error("Error: Utils::path_dump: could not create output file");
+	}
+	if (file.is_open() == false) {
+		throw std::runtime_error("Error: Utils::path_dump: could not create output file");
+	}
+	file << p.length<< std::endl;
 	file.close();
 }
