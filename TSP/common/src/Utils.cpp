@@ -86,3 +86,10 @@ void Utils::path_dump(Path const& p) {
 	file << p.length<< std::endl;
 	file.close();
 }
+
+void Utils::path_calc(Utils::Path& path, Utils::matrix_t const& matrix) {
+	path.length = 0;
+	for (long i = 0, j = path.path.size() - 1; i < j; ++i) {
+		path.length += matrix[path.path[i]][path.path[i+1]];
+	}
+}
