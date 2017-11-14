@@ -11,7 +11,7 @@ int main(int ac, char** av)
 {
 	if (ac == 1)
 	{
-		std::cerr << "Error: usage: ./tsp_agent_2 matrix_file";
+		std::cerr << "Error: usage: ./tsp_agent_3 matrix_file";
 		return 1;
 	}
 	try
