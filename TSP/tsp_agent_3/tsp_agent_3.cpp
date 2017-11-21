@@ -34,29 +34,25 @@ int main(int ac, char** av)
 		}
 		p.length += (*matrix)[p.path.front()][p.path.back()];
 		p.path.push_back(0);
-		Utils::path_dump(p);
-		std::cout << "elapsed time:" << std::clock() << "ms" << std::endl;
-		while (std::clock() < 5000) {
-			static int iteration;
-			for (int j = p.path.size() - 4; iteration < j; ++iteration) {
-				int ia = p.path[iteration], ib = p.path[iteration+1], ic, id;
-				for (int i = iteration + 2; i < j; ++i) {
-					int length = p.length;
-					ic = p.path[i];
-					id = p.path[i+1];
-					p.path[iteration+1] = ic;
-					p.path[i] = ib;
-					Utils::path_calc(p, *matrix);
-					if (p.length > length) {
-						p.path[iteration + 1] = ib;
-						p.path[i] = ic;
-						p.length = length;
-					}
+		int iteration = 0;
+		for (int j = p.path.size() - 4; iteration < j; ++iteration) {
+			int ia = p.path[iteration], ib = p.path[iteration+1], ic, id;
+			for (int i = iteration + 2; i < j; ++i) {
+				int length = p.length;
+				ic = p.path[i];
+				id = p.path[i+1];
+				p.path[iteration+1] = ic;
+				p.path[i] = ib;
+				Utils::path_calc(p, *matrix);
+				if (p.length > length) {
+					p.path[iteration + 1] = ib;
+					p.path[i] = ic;
+					p.length = length;
 				}
 			}
 		}
-		Utils::path_calc(p, *matrix);
-		std::cout << p.length << std::endl;
+		Utils::path_dump(p);
+		std::cout << "elapsed time:" << std::clock() << "ms" << std::endl;
 	}
 	catch (const std::exception& e)
 	{
