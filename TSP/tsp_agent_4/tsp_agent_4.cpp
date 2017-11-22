@@ -3,9 +3,50 @@
 #include <iostream>
 #include <string>
 #include <random>
+#include <set>
+#include <map>
 
 #include "Utils.h"
 #include "Genetics.h"
+
+Utils::Path* shortest_2opt(Utils::matrix_t* matrix) {
+	std::set<int> left_nodes; for (int i = 1, j = matrix->size(); i < j; ++i) left_nodes.insert(i);
+	Utils::Path* P = new Utils::Path();
+	Utils::Path& p = *P;
+
+	p.path.push_back(0);
+	while (left_nodes.size() > 0) {
+		std::map<int, int> distances;
+		std::vector< int >& line = (*matrix)[p.path.back()];
+		for (int i = 0, j = matrix->size(); i < j; ++i)
+			if (left_nodes.find(i) != left_nodes.end())
+				distances[line[i]] = i;
+		auto it = distances.begin();
+		left_nodes.erase(it->second);
+		p.length += it->first;
+		p.path.push_back(it->second);
+	}
+	p.length += (*matrix)[p.path.front()][p.path.back()];
+	p.path.push_back(0);
+	int iteration = 0;
+	for (int j = p.path.size() - 4; iteration < j; ++iteration) {
+		int ia = p.path[iteration], ib = p.path[iteration + 1], ic, id;
+		for (int i = iteration + 2; i < j; ++i) {
+			int length = p.length;
+			ic = p.path[i];
+			id = p.path[i + 1];
+			p.path[iteration + 1] = ic;
+			p.path[i] = ib;
+			Utils::path_calc(p, *matrix);
+			if (p.length > length) {
+				p.path[iteration + 1] = ib;
+				p.path[i] = ic;
+				p.length = length;
+			}
+		}
+	}
+	return P;
+}
 
 class CTour : public Genetics::IChromosome {
 	double m_fitness;
@@ -15,7 +56,7 @@ class CTour : public Genetics::IChromosome {
 		std::size_t const half_size = p1->m_path.path.size() / 2;
 
 		m_path.path.assign(p1->m_path.path.begin(), p1->m_path.path.begin() + half_size);
-		m_path.path.insert(m_path.path.end(), p2->m_path.path.begin() + half_size, p2->m_path.path.end());
+		m_path.path.insert(m_path.path.end(), p1->m_path.path.begin() + half_size, p1->m_path.path.end());
 		m_matrix = p1->m_matrix;
 	}
 
@@ -23,10 +64,9 @@ class CTour : public Genetics::IChromosome {
 public:
 	Utils::Path m_path;
 
-	CTour(Utils::matrix_t* matrix) {
+	CTour(Utils::matrix_t* matrix, Utils::Path* basePath) {
 		m_matrix = matrix;
-		for (int i = 0, j = matrix->size(); i < j; ++i) m_path.path.push_back(i);
-		m_path.path.push_back(0);
+		m_path = *basePath;
 	}
 
 	IChromosome* crossover(IChromosome* chromosome, double rate) {
@@ -35,19 +75,24 @@ public:
 	}
 
 	int mutate(double rate) {
-		for (int i = 0, j = m_path.path.size(); i < j; ++i) if (std::rand() % 101 <= rate*100) m_path.path[i] = std::rand() % m_matrix->size();
-		return 0; 
+		int tmp;
+		int jump;
+		Utils::path_calc(m_path, *m_matrix);
+		Utils::path_dump(m_path);
+		for (int i = 1, j = m_path.path.size() - 1; i < j; ++i) if (std::rand() % 101 <= rate * 100) {
+			jump = (i + (std::rand() % j)) % (j+1);
+			if (jump == 0 || jump >= j-1) jump = 1;
+			tmp = m_path.path[jump];
+			m_path.path[jump] = m_path.path[i];
+			m_path.path[i] = tmp;
+		}
+		Utils::path_calc(m_path, *m_matrix);
+		Utils::path_dump(m_path);
+		exit(0);
+		return 0;
 	}
 
 	int evaluateFitness() {
-		if (m_path.path.front() != 0 || m_path.path.back() != 0) {
-			m_fitness = 0;
-			return 0;
-		}
-		for (int i = 0, j = m_matrix->size(); i < j; ++i) if (std::find(m_path.path.begin(), m_path.path.end(), i) == m_path.path.end()) {
-			m_fitness = 0;
-			return 0;
-		}
 		Utils::path_calc(m_path, *m_matrix);
 		m_fitness = 100 / m_path.length;
 		return 0; 
@@ -58,13 +103,16 @@ public:
 
 class CTourFactory : public Genetics::IChromosomeFactory {
 	Utils::matrix_t* m_matrix;
+	Utils::Path* m_basePath;
+
 public:
 	Genetics::IChromosome* newChromosome() const {
-		return new CTour(m_matrix);
+		return new CTour(m_matrix, m_basePath);
 	}
 
-	CTourFactory(Utils::matrix_t* matrix) {
+	CTourFactory(Utils::matrix_t* matrix, Utils::Path* basePath) {
 		m_matrix = matrix;
+		m_basePath = basePath;
 		std::srand(std::time(0));
 	}
 };
@@ -73,18 +121,19 @@ int main(int ac, char** av)
 {
 	if (ac == 1)
 	{
-		std::cerr << "Error: usage: ./tsp_agent_3 matrix_file";
+		std::cerr << "Error: usage: ./tsp_agent_4 matrix_file";
 		return 1;
 	}
 	try
 	{
 		Utils::matrix_t* matrix = Utils::matrix_builder(av[1]);
-		Genetics::CPopulation population(200, 0.01, 0.01, 20, 30);
-		CTourFactory cfactory(matrix);
+		Utils::Path* basePath = shortest_2opt(matrix);
+		Genetics::CPopulation population(200, 0.01, 0.05, 100, 200);
+		CTourFactory cfactory(matrix, basePath);
 		CTour* best = NULL;
 
 		population.initialize(cfactory);
-		for (int i = 100; i > 0; --i) {
+		for (int i = 1000; i > 0; --i) {
 			population.evolveOnce();
 			best = (CTour*)population.findBest();
 		}
