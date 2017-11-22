@@ -115,8 +115,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\common\src\Genetics.cpp" />
     <ClCompile Include="..\common\src\Utils.cpp" />
     <ClCompile Include="tsp_agent_4.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\inc\Genetics.h" />
+    <ClInclude Include="..\common\inc\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

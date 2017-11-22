@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "Utils.h"
+#include "Genetics.h"
 
 int main(int ac, char** av)
 {
@@ -14,8 +15,11 @@ int main(int ac, char** av)
 	try
 	{
 		Utils::matrix_t* matrix = Utils::matrix_builder(av[1]);
-		Utils::Path p;
-		Utils::path_dump(p);
+		Genetics::Default::ChromosomeFactory< Genetics::Default::Chromosome<int> > cfactory;
+		Genetics::CPopulation population(20, 0.3, 0.3);
+
+		population.initialize(cfactory);
+		population.evaluateFitness();
 		std::cout << "elapsed time:" << std::clock() << "ms" << std::endl;
 	}
 	catch (const std::exception& e)
