@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tsp_agent_2", "tsp_agent_2\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tsp_agent_3", "tsp_agent_3\tsp_agent_3.vcxproj", "{A8B08168-FFB7-40AC-92AC-D449EA95B01B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tsp_agent_4", "tsp_agent_4\tsp_agent_4.vcxproj", "{CD26C5B5-8C3B-425B-9FD1-1F823A41BC7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{A8B08168-FFB7-40AC-92AC-D449EA95B01B}.Release|x64.Build.0 = Release|x64
 		{A8B08168-FFB7-40AC-92AC-D449EA95B01B}.Release|x86.ActiveCfg = Release|Win32
 		{A8B08168-FFB7-40AC-92AC-D449EA95B01B}.Release|x86.Build.0 = Release|Win32
+		{CD26C5B5-8C3B-425B-9FD1-1F823A41BC7A}.Debug|x64.ActiveCfg = Debug|x64
+		{CD26C5B5-8C3B-425B-9FD1-1F823A41BC7A}.Debug|x64.Build.0 = Debug|x64
+		{CD26C5B5-8C3B-425B-9FD1-1F823A41BC7A}.Debug|x86.ActiveCfg = Debug|Win32
+		{CD26C5B5-8C3B-425B-9FD1-1F823A41BC7A}.Debug|x86.Build.0 = Debug|Win32
+		{CD26C5B5-8C3B-425B-9FD1-1F823A41BC7A}.Release|x64.ActiveCfg = Release|x64
+		{CD26C5B5-8C3B-425B-9FD1-1F823A41BC7A}.Release|x64.Build.0 = Release|x64
+		{CD26C5B5-8C3B-425B-9FD1-1F823A41BC7A}.Release|x86.ActiveCfg = Release|Win32
+		{CD26C5B5-8C3B-425B-9FD1-1F823A41BC7A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
