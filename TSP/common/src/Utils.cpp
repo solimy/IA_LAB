@@ -6,6 +6,7 @@
 #include <string>
 #include <sstream>
 #include <chrono>
+#include <set>
 
 Utils::matrix_t* Utils::matrix_builder(std::string const& filename) {
 	auto matrix = new Utils::matrix_t();
@@ -92,4 +93,30 @@ void Utils::path_calc(Utils::Path& path, Utils::matrix_t const& matrix) {
 	for (long i = 0, j = path.path.size() - 1; i < j; ++i) {
 		path.length += matrix[path.path[i]][path.path[i+1]];
 	}
+}
+
+bool Utils::path_isValid(Utils::Path const& p, Utils::matrix_t const& matrix) {
+	std::set<int> cities;
+	std::vector<int> tmp;
+
+	std::cout << "step 1" << std::endl;
+	if (p.path.size() != matrix.size() + 1) return false;
+	std::cout << "step 2" << std::endl;
+	if (p.path.front() != p.path.back()) return false;
+	tmp.assign(p.path.begin(), p.path.end() - 1);
+	std::cout << "step 3" << std::endl;
+	for (int i = 0, j = matrix.size(); i < j; ++i) cities.insert(i);
+	for (int city : tmp) {
+		if (cities.find(city) == cities.end()) {
+			std::cout << "city: " << city << std::endl;
+			//return false;
+		}
+		else cities.erase(city);
+	}
+	std::cout << "step 4" << std::endl;
+	if (cities.size() > 0) {
+		for (int city : cities) std::cout << "left city: " << city << std::endl;
+		return false;
+	}
+	return true;
 }

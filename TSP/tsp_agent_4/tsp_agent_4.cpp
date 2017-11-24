@@ -28,22 +28,26 @@ Utils::Path* shortest_2opt(Utils::matrix_t* matrix) {
 	}
 	p.length += (*matrix)[p.path.front()][p.path.back()];
 	p.path.push_back(0);
-	int iteration = 0;
-	for (int j = p.path.size() - 4; iteration < j; ++iteration) {
-		int ia = p.path[iteration], ib = p.path[iteration + 1], ic, id;
-		for (int i = iteration + 2; i < j; ++i) {
-			int length = p.length;
-			ic = p.path[i];
-			id = p.path[i + 1];
-			p.path[iteration + 1] = ic;
-			p.path[i] = ib;
-			Utils::path_calc(p, *matrix);
-			if (p.length > length) {
-				p.path[iteration + 1] = ib;
-				p.path[i] = ic;
-				p.length = length;
+	//Utils::path_dump(p);
+	std::cout << Utils::path_isValid(p, *matrix) << std::endl;
+	for (int repetition = 1; repetition > 0; --repetition) {
+		for (int iteration = 0, j = p.path.size() - 4; iteration <= j; ++iteration) {
+			int ib = p.path[iteration + 1];
+			for (int i = iteration + 2; i <= j+2; ++i) {
+				int length = p.length;
+				int ic = p.path[i];
+				p.path[iteration + 1] = ic;
+				p.path[i] = ib;
+				Utils::path_calc(p, *matrix);
+				if (p.length >= length) {
+					p.path[iteration + 1] = ib;
+					p.path[i] = ic;
+					p.length = length;
+				}
+				//Utils::path_dump(p);
 			}
 		}
+		//Utils::path_dump(p);
 	}
 	return P;
 }
@@ -77,8 +81,7 @@ public:
 	int mutate(double rate) {
 		int tmp;
 		int jump;
-		Utils::path_calc(m_path, *m_matrix);
-		Utils::path_dump(m_path);
+
 		for (int i = 1, j = m_path.path.size() - 1; i < j; ++i) if (std::rand() % 101 <= rate * 100) {
 			jump = (i + (std::rand() % j)) % (j+1);
 			if (jump == 0 || jump >= j-1) jump = 1;
@@ -86,9 +89,6 @@ public:
 			m_path.path[jump] = m_path.path[i];
 			m_path.path[i] = tmp;
 		}
-		Utils::path_calc(m_path, *m_matrix);
-		Utils::path_dump(m_path);
-		exit(0);
 		return 0;
 	}
 
@@ -130,13 +130,14 @@ int main(int ac, char** av)
 		Utils::Path* basePath = shortest_2opt(matrix);
 		Genetics::CPopulation population(200, 0.01, 0.05, 100, 200);
 		CTourFactory cfactory(matrix, basePath);
-		CTour* best = NULL;
+		CTour* best = NULL; best = new CTour(matrix, basePath);
 
 		population.initialize(cfactory);
-		for (int i = 1000; i > 0; --i) {
+		for (int i = 0; i > 0; --i) {
 			population.evolveOnce();
 			best = (CTour*)population.findBest();
 		}
+		std::cout << Utils::path_isValid(best->m_path, *matrix) << std::endl;
 		Utils::path_dump(best->m_path);
 		std::cout << "elapsed time:" << std::clock() << "ms" << std::endl;
 	}

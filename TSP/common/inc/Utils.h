@@ -18,6 +18,7 @@ namespace Utils {
 
 	void path_dump(Path const&);
 	void path_calc(Path&, matrix_t const& matrix);
+	bool path_isValid(Path const&, matrix_t const& matrix);
 }
 
 #endif // !UTILS_H_
