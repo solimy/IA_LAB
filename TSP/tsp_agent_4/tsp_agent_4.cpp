@@ -36,13 +36,13 @@ Utils::Path* shortest_2opt(Utils::matrix_t* matrix) {
 			for (int i = iteration + 2; i <= j+2; ++i) {
 				int length = p.length;
 				int ic = p.path[i];
-				p.path[iteration + 1] = ic;
-				p.path[i] = ib;
+				/*danger*/p.path[iteration + 1] = ic;
+				/*danger*/p.path[i] = ib;
 				Utils::path_calc(p, *matrix);
 				if (p.length >= length) {
-					p.path[iteration + 1] = ib;
-					p.path[i] = ic;
-					p.length = length;
+					/*danger*/p.path[iteration + 1] = ib;
+					/*danger*/p.path[i] = ic;
+					/*danger*/p.length = length;
 				}
 				//Utils::path_dump(p);
 			}
