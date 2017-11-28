@@ -17,11 +17,11 @@ int main(int ac, char** av)
 	try
 	{
 		Utils::matrix_t* matrix = Utils::matrix_builder(av[1]);
-		Utils::Path* p = Utils::TSP::greedy(matrix);
+		Utils::Path* p = Utils::Algorithm::greedy(matrix);
 		int length;
 		while (std::clock() < 25000) {
 			length = p->length;
-			p = Utils::TSP::two_opt(p, matrix);
+			p = Utils::Algorithm::two_opt(p, matrix);
 			if (p->length == length) break;
 		}
 		Utils::path_dump(*p);

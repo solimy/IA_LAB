@@ -21,7 +21,7 @@ namespace Utils {
 	bool path_isValid(Path const&, matrix_t const& matrix);
 	bool path_isValid_verbose(Path const&, matrix_t const& matrix);
 
-	namespace TSP {
+	namespace Algorithm {
 		Path* greedy(matrix_t*);
 		Path* two_opt(Path*, matrix_t*);
 	}

@@ -149,7 +149,7 @@ bool Utils::path_isValid(Utils::Path const& p, Utils::matrix_t const& matrix) {
 	return true;
 }
 
-Utils::Path* Utils::TSP::greedy(Utils::matrix_t* matrix) {
+Utils::Path* Utils::Algorithm::greedy(Utils::matrix_t* matrix) {
 	std::set<int> left_nodes; for (int i = 1, j = matrix->size(); i < j; ++i) left_nodes.insert(i);
 	Utils::Path* P = new Utils::Path();
 	Utils::Path& p = *P;
@@ -171,7 +171,7 @@ Utils::Path* Utils::TSP::greedy(Utils::matrix_t* matrix) {
 	return P;
 }
 
-Utils::Path* Utils::TSP::two_opt(Utils::Path* P, Utils::matrix_t* matrix) {
+Utils::Path* Utils::Algorithm::two_opt(Utils::Path* P, Utils::matrix_t* matrix) {
 	Utils::Path& p = *P;
 	for (int iteration = 0, j = p.path.size() - 4; iteration <= j; ++iteration) {
 		for (int i = iteration + 2; i <= j + 2; ++i) {

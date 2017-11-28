@@ -84,10 +84,7 @@ int main(int ac, char** av)
 	try
 	{
 		Utils::matrix_t* matrix = Utils::matrix_builder(av[1]);
-		Utils::Path* basePath = Utils::TSP::greedy(matrix);
-		basePath = Utils::TSP::two_opt(basePath, matrix);
-		basePath = Utils::TSP::two_opt(basePath, matrix);
-		basePath = Utils::TSP::two_opt(basePath, matrix);
+		Utils::Path* basePath = Utils::Algorithm::greedy(matrix);
 		Genetics::CPopulation population(200, 0.01, 0.05, 100, 200);
 		CTourFactory cfactory(matrix, basePath);
 		CTour* best = NULL; best = new CTour(matrix, basePath);
