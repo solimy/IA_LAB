@@ -31,7 +31,7 @@ Utils::Path* shortest_2opt(Utils::matrix_t* matrix) {
 	//Utils::path_dump(p);
 	std::cout << Utils::path_isValid(p, *matrix) << std::endl;
 	std::cout << "path length=" << p.length << std::endl;
-	while (std::clock() < 25000) {
+	for (int generation = 5; generation > 0; --generation) {
 		for (int iteration = 0, j = p.path.size() - 4; iteration <= j; ++iteration) {
 			for (int i = iteration + 2; i <= j+2; ++i) {
 				int length = p.length;
