@@ -17,41 +17,14 @@ int main(int ac, char** av)
 	try
 	{
 		Utils::matrix_t* matrix = Utils::matrix_builder(av[1]);
-		std::set<int> left_nodes; for (int i = 1, j = matrix->size(); i < j; ++i) left_nodes.insert(i);
-		Utils::Path p;
-
-		p.path.push_back(0);
-		while (left_nodes.size() > 0) {
-			std::map<int, int> distances;
-			std::vector< int >& line = (*matrix)[p.path.back()];
-			for (int i = 0, j = matrix->size(); i < j; ++i)
-				if (left_nodes.find(i) != left_nodes.end())
-					distances[line[i]] = i;
-			auto it = distances.begin();
-			left_nodes.erase(it->second);
-			p.length += it->first;
-			p.path.push_back(it->second);
+		Utils::Path* p = Utils::TSP::greedy(matrix);
+		int length;
+		while (std::clock() < 25000) {
+			length = p->length;
+			p = Utils::TSP::two_opt(p, matrix);
+			if (p->length == length) break;
 		}
-		p.length += (*matrix)[p.path.front()][p.path.back()];
-		p.path.push_back(0);
-		int iteration = 0;
-		for (int j = p.path.size() - 4; iteration < j; ++iteration) {
-			for (int i = iteration + 2; i < j; ++i) {
-				int ia = p.path[iteration], ib = p.path[iteration + 1], ic, id;
-				int length = p.length;
-				ic = p.path[i];
-				id = p.path[i+1];
-				p.path[iteration+1] = ic;
-				p.path[i] = ib;
-				Utils::path_calc(p, *matrix);
-				if (p.length > length) {
-					p.path[iteration + 1] = ib;
-					p.path[i] = ic;
-					p.length = length;
-				}
-			}
-		}
-		Utils::path_dump(p);
+		Utils::path_dump(*p);
 		std::cout << "elapsed time:" << std::clock() << "ms" << std::endl;
 	}
 	catch (const std::exception& e)
