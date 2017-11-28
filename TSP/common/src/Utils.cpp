@@ -99,23 +99,32 @@ bool Utils::path_isValid(Utils::Path const& p, Utils::matrix_t const& matrix) {
 	std::set<int> cities;
 	std::vector<int> tmp;
 
-	std::cout << "step 1" << std::endl;
-	if (p.path.size() != matrix.size() + 1) return false;
-	std::cout << "step 2" << std::endl;
-	if (p.path.front() != p.path.back()) return false;
+	std::cout << "verifying path size" << std::endl;
+	if (p.path.size() != matrix.size() + 1) {
+		std::cout << "path size: KO" << std::endl;
+		return false;
+		}
+	std::cout << "path size: OK" << std::endl;
+	std::cout << "verifying if path loops" << std::endl;
+	if (p.path.front() != p.path.back()) {
+		std::cout << "path loop: KO" << std::endl;
+		return false;
+	}
+	std::cout << "path loop: OK" << std::endl;
 	tmp.assign(p.path.begin(), p.path.end() - 1);
-	std::cout << "step 3" << std::endl;
+	std::cout << "verifying city duplication" << std::endl;
 	for (int i = 0, j = matrix.size(); i < j; ++i) cities.insert(i);
-	for (int city : tmp) {
+	for (int i = 0, j = tmp.size(); i < j; ++i) {
+		int city = tmp[i];
 		if (cities.find(city) == cities.end()) {
-			std::cout << "city: " << city << std::endl;
+			std::cout << "duplicated city: index[" << i << "] = " << city << std::endl;
 			//return false;
 		}
 		else cities.erase(city);
 	}
-	std::cout << "step 4" << std::endl;
+	std::cout << "looking for missing cities in path" << std::endl;
 	if (cities.size() > 0) {
-		for (int city : cities) std::cout << "left city: " << city << std::endl;
+		for (int city : cities) std::cout << "missing city: " << city << std::endl;
 		return false;
 	}
 	return true;

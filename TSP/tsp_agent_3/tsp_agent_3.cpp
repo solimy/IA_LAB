@@ -36,8 +36,8 @@ int main(int ac, char** av)
 		p.path.push_back(0);
 		int iteration = 0;
 		for (int j = p.path.size() - 4; iteration < j; ++iteration) {
-			int ia = p.path[iteration], ib = p.path[iteration+1], ic, id;
 			for (int i = iteration + 2; i < j; ++i) {
+				int ia = p.path[iteration], ib = p.path[iteration + 1], ic, id;
 				int length = p.length;
 				ic = p.path[i];
 				id = p.path[i+1];

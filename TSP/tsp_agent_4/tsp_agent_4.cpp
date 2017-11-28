@@ -30,24 +30,25 @@ Utils::Path* shortest_2opt(Utils::matrix_t* matrix) {
 	p.path.push_back(0);
 	//Utils::path_dump(p);
 	std::cout << Utils::path_isValid(p, *matrix) << std::endl;
-	for (int repetition = 1; repetition > 0; --repetition) {
+	std::cout << "path length=" << p.length << std::endl;
+	while (std::clock() < 25000) {
 		for (int iteration = 0, j = p.path.size() - 4; iteration <= j; ++iteration) {
-			int ib = p.path[iteration + 1];
 			for (int i = iteration + 2; i <= j+2; ++i) {
 				int length = p.length;
+				int ib = p.path[iteration + 1];
 				int ic = p.path[i];
-				/*danger*/p.path[iteration + 1] = ic;
-				/*danger*/p.path[i] = ib;
+				p.path[iteration + 1] = ic;
+				p.path[i] = ib;
 				Utils::path_calc(p, *matrix);
 				if (p.length >= length) {
-					/*danger*/p.path[iteration + 1] = ib;
-					/*danger*/p.path[i] = ic;
-					/*danger*/p.length = length;
+					p.path[iteration + 1] = ib;
+					p.path[i] = ic;
+					p.length = length;
+					continue;
 				}
-				//Utils::path_dump(p);
 			}
 		}
-		//Utils::path_dump(p);
+		std::cout << "path length=" << p.length << std::endl;
 	}
 	return P;
 }
