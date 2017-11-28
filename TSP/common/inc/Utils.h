@@ -19,6 +19,12 @@ namespace Utils {
 	void path_dump(Path const&);
 	void path_calc(Path&, matrix_t const& matrix);
 	bool path_isValid(Path const&, matrix_t const& matrix);
+	bool path_isValid_verbose(Path const&, matrix_t const& matrix);
+
+	namespace TSP {
+		Path* greedy(matrix_t*);
+		Path* two_opt(Path*, matrix_t*);
+	}
 }
 
 #endif // !UTILS_H_

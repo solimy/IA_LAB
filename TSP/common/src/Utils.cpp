@@ -7,6 +7,7 @@
 #include <sstream>
 #include <chrono>
 #include <set>
+#include <map>
 
 Utils::matrix_t* Utils::matrix_builder(std::string const& filename) {
 	auto matrix = new Utils::matrix_t();
@@ -95,7 +96,7 @@ void Utils::path_calc(Utils::Path& path, Utils::matrix_t const& matrix) {
 	}
 }
 
-bool Utils::path_isValid(Utils::Path const& p, Utils::matrix_t const& matrix) {
+bool Utils::path_isValid_verbose(Utils::Path const& p, Utils::matrix_t const& matrix) {
 	std::set<int> cities;
 	std::vector<int> tmp;
 
@@ -128,4 +129,65 @@ bool Utils::path_isValid(Utils::Path const& p, Utils::matrix_t const& matrix) {
 		return false;
 	}
 	return true;
+}
+
+bool Utils::path_isValid(Utils::Path const& p, Utils::matrix_t const& matrix) {
+	std::set<int> cities;
+	std::vector<int> tmp;
+
+	if (p.path.size() != matrix.size() + 1) return false;
+	if (p.path.front() != p.path.back()) return false;
+	tmp.assign(p.path.begin(), p.path.end() - 1);
+	for (int i = 0, j = matrix.size(); i < j; ++i) cities.insert(i);
+	for (int city : tmp) {
+		if (cities.find(city) == cities.end()) {
+			return false;
+		}
+		else cities.erase(city);
+	}
+	if (cities.size() > 0) return false;
+	return true;
+}
+
+Utils::Path* Utils::TSP::greedy(Utils::matrix_t* matrix) {
+	std::set<int> left_nodes; for (int i = 1, j = matrix->size(); i < j; ++i) left_nodes.insert(i);
+	Utils::Path* P = new Utils::Path();
+	Utils::Path& p = *P;
+
+	p.path.push_back(0);
+	while (left_nodes.size() > 0) {
+		std::map<int, int> distances;
+		std::vector< int >& line = (*matrix)[p.path.back()];
+		for (int i = 0, j = matrix->size(); i < j; ++i)
+			if (left_nodes.find(i) != left_nodes.end())
+				distances[line[i]] = i;
+		auto it = distances.begin();
+		left_nodes.erase(it->second);
+		p.length += it->first;
+		p.path.push_back(it->second);
+	}
+	p.length += (*matrix)[p.path.front()][p.path.back()];
+	p.path.push_back(0);
+	return P;
+}
+
+Utils::Path* Utils::TSP::two_opt(Utils::Path* P, Utils::matrix_t* matrix) {
+	Utils::Path& p = *P;
+	for (int iteration = 0, j = p.path.size() - 4; iteration <= j; ++iteration) {
+		for (int i = iteration + 2; i <= j + 2; ++i) {
+			int length = p.length;
+			int ib = p.path[iteration + 1];
+			int ic = p.path[i];
+			p.path[iteration + 1] = ic;
+			p.path[i] = ib;
+			Utils::path_calc(p, *matrix);
+			if (p.length >= length) {
+				p.path[iteration + 1] = ib;
+				p.path[i] = ic;
+				p.length = length;
+				continue;
+			}
+		}
+	}
+	return P;
 }
