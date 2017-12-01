@@ -98,3 +98,12 @@ int Genetics::CPopulation::survivorSelection() {
 	}
 	return 0;
 }
+
+void Genetics_v2::CGeneticEngine::setOption(Genetics_v2::EngineOptions::EParentsSelection opt) {
+	switch (opt) {
+	case Genetics_v2::EngineOptions::EParentsSelection::ROULETTE_WHEEL:
+		m_parentSelection = [](std::vector<IChromosome*>& population, std::vector<IChromosome*>& parents)-> void {};
+	default:
+		break;
+	}
+} 

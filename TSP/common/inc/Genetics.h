@@ -57,4 +57,65 @@ namespace Genetics {
 	};
 }
 
+namespace Genetics_v2 {
+
+	class IChromosome {};
+
+	namespace EngineOptions {
+		
+		enum class EParentsSelection : int {
+			FITNESS_PROPORTIONATE,
+			ROULETTE_WHEEL,
+			TOURNAMENT,
+			RANK,
+			RANDOM,
+			CUSTOM,
+			LAST
+		};
+
+		enum class ECrossover {
+			ONE_POINT,
+			MULTI_POINT,
+			UNIFORM,
+			OX1,
+			CUSTOM,
+			LAST
+		};
+
+		enum class EMutation {
+			RANDOM_RESETTING,
+			SWAP,
+			SCRAMBLE,
+			INVERSION,
+			CUSTOM,
+			LAST
+		};
+
+		enum class ESruvivorSelection {
+			AGE_BASED,
+			FITNESS_BASED,
+			CUSTOM,
+			LAST
+		};
+	}
+
+	class CGeneticEngine {
+	private:
+		void (*m_parentSelection)(std::vector<IChromosome*>& population, std::vector<IChromosome*>& parents);
+		void (*m_crossover)(std::vector<IChromosome*>& population, std::vector<IChromosome*>& parents);
+		void (*m_mutation)(std::vector<IChromosome*>& children);
+		void (*m_survivorSelection)(std::vector<IChromosome*>& population);
+
+	public:
+		CGeneticEngine();
+		void run();
+
+		void setOption(EngineOptions::EParentsSelection);
+		void setOption(EngineOptions::ECrossover);
+		void setOption(EngineOptions::EMutation);
+		void setOption(EngineOptions::ESruvivorSelection);
+	};
+
+}
+
 #endif // !GENETICS_H_
