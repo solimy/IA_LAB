@@ -156,11 +156,11 @@ Utils::Path* Utils::Algorithm::greedy(Utils::matrix_t* matrix) {
 
 	p.path.push_back(0);
 	while (left_nodes.size() > 0) {
-		std::map<int, int> distances;
+		std::multimap<int, int> distances;
 		std::vector< int >& line = (*matrix)[p.path.back()];
 		for (int i = 0, j = matrix->size(); i < j; ++i)
-			if (left_nodes.find(i) != left_nodes.end() && distances.find(line[i]) == distances.end())
-				distances[line[i]] = i;
+			if (left_nodes.find(i) != left_nodes.end())
+				distances.insert(std::pair<int, int>(line[i], i));
 		auto it = distances.begin();
 		left_nodes.erase(it->second);
 		p.length += it->first;
