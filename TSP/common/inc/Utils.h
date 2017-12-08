@@ -24,6 +24,7 @@ namespace Utils {
 	namespace Algorithm {
 		Path* greedy(matrix_t*);
 		Path* two_opt(Path*, matrix_t*);
+		Path* ACO(matrix_t*);
 	}
 }
 
